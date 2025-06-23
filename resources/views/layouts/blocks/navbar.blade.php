@@ -40,27 +40,24 @@
 
              @if(Auth::user()->user_type == 'admin')
 
-             {{--
-             <!-- Patient -->
-             <li class="nav-item <?php if(Request::segment(2) == 'patient-list' || Request::segment(2) == 'patient-queries' || Request::segment(2) == 'patient-reset-password') { echo 'active'; } ?>">
-              <a class="nav-link collapsed" data-bs-toggle="collapse" href="#forms" aria-expanded="<?php if(Request::segment(2) == 'patient-list' || Request::segment(2) == 'patient-queries' || Request::segment(2) == 'patient-reset-password') { echo 'true'; } ?>" aria-controls="forms">
-                <span class="menu-title">Patient</span>
+             
+             <!-- Article -->
+             <li class="nav-item <?php if(Request::segment(2) == 'list' || Request::segment(2) == 'create') { echo 'active'; } ?>">
+              <a class="nav-link collapsed" data-bs-toggle="collapse" href="#forms" aria-expanded="<?php if(Request::segment(2) == 'list' || Request::segment(2) == 'create') { echo 'true'; } ?>" aria-controls="forms">
+                <span class="menu-title">Article</span>
                 <i class="mdi mdi-format-list-bulleted menu-icon"></i>
               </a>
-              <div class="collapse <?php if(Request::segment(2) == 'patient-list' || Request::segment(2) == 'patient-queries' || Request::segment(2) == 'patient-reset-password') { echo 'show'; } ?>" id="forms" style="">
+              <div class="collapse <?php if(Request::segment(2) == 'list' || Request::segment(2) == 'create') { echo 'show'; } ?>" id="forms" style="">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item">
-                    <a class="nav-link <?php if(Request::segment(2) == 'patient-list') { echo 'active'; } ?>" href="{{ route('hospital.patient.list') }}">Patient List</a>
+                    <a class="nav-link <?php if(Request::segment(2) == 'list') { echo 'active'; } ?>" href="{{ route('admin.article.list') }}">Article List</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link <?php if(Request::segment(2) == 'patient-queries') { echo 'active'; } ?>" href="{{ route('hospital.patient.queries') }}">Patient Queries</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link <?php if(Request::segment(2) == 'patient-reset-password') { echo 'active'; } ?>" href="{{ route('hospital.reset-password') }}">Patient Reset Password</a>
+                    <a class="nav-link <?php if(Request::segment(2) == 'create') { echo 'active'; } ?>" href="{{ route('admin.article.create') }}">Article Create</a>
                   </li>
                 </ul>
               </div>
-            </li> --}}
+            </li>
 
             
 

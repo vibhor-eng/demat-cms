@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ArticleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +16,9 @@ use App\Http\Controllers\HomeController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 // Auth::routes();
 
@@ -34,6 +35,13 @@ Route::prefix('admin')->group(function () {
 Route::group(['prefix' => 'admin','middleware' => ['auth'],],function () {
 
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('admin.dashboard');
+
+});
+
+Route::group(['prefix' => 'admin/article','middleware' => ['auth'],],function () {
+
+    Route::get('/list', [App\Http\Controllers\ArticleController::class, 'list'])->name('admin.article.list');
+    Route::get('/create', [App\Http\Controllers\ArticleController::class, 'create'])->name('admin.article.create');
 
 });
 
