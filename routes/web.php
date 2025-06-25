@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\AuthorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,13 @@ Route::group(['prefix' => 'admin/article','middleware' => ['auth'],],function ()
 
     Route::get('/list', [App\Http\Controllers\ArticleController::class, 'list'])->name('admin.article.list');
     Route::get('/create', [App\Http\Controllers\ArticleController::class, 'create'])->name('admin.article.create');
+
+});
+
+Route::group(['prefix' => 'admin/author','middleware' => ['auth'],],function () {
+
+    Route::get('/list', [App\Http\Controllers\AuthorController::class, 'list'])->name('admin.author.list');
+    Route::get('/create', [App\Http\Controllers\AuthorController::class, 'create'])->name('admin.author.create');
 
 });
 

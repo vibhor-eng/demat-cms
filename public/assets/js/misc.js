@@ -45,16 +45,16 @@ var ChartColor = ["#5D62B4", "#54C3BE", "#EF726F", "#F9C446", "rgb(93.0, 98.0, 1
       }
     }
 
-    var current = location.pathname.split("/").slice(-1)[0].replace(/^\/|\/$/g, '');
-    $('.nav li a', sidebar).each(function() {
-      var $this = $(this);
-      addActiveClass($this);
-    })
+    // var current = location.pathname.split("/").slice(-1)[0].replace(/^\/|\/$/g, '');
+    // $('.nav li a', sidebar).each(function() {
+    //   var $this = $(this);
+    //   addActiveClass($this);
+    // })
 
-    $('.horizontal-menu .nav li a').each(function() {
-      var $this = $(this);
-      addActiveClass($this);
-    })
+    // $('.horizontal-menu .nav li a').each(function() {
+    //   var $this = $(this);
+    //   addActiveClass($this);
+    // })
 
     //Close other submenu in sidebar on opening any
 

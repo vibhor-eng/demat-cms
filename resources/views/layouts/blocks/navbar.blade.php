@@ -16,71 +16,52 @@
                 <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
               </a>
             </li>
-             @if(Auth::user()->user_type == 'user')
-            <li class="nav-item <?php if(Request::segment(2) == 'dashboard') { echo 'active'; } ?>">
-              <a class="nav-link" href="{{ route('patient.dashboard') }}">
-                <span class="menu-title">Dashboard</span>
-                <i class="mdi mdi-home menu-icon"></i>
-              </a>
-            </li>
-            <!-- <li class="nav-item <?php //if(Request::segment(2) == 'feedback') { echo 'active'; } ?>">
-              <a class="nav-link" href="{{ route('patient.feedback') }}">
-                <span class="menu-title">Feedback</span>
-                <i class="mdi mdi-home menu-icon"></i>
-              </a>
-            </li> -->
-            @else
+            
             <li class="nav-item <?php if(Request::segment(2) == 'dashboard') { echo 'active'; } ?>">
               <a class="nav-link" href="{{ route('admin.dashboard') }}">
                 <span class="menu-title">Dashboard</span>
                 <i class="mdi mdi-home menu-icon"></i>
               </a>
             </li>
-            @endif
-
-             @if(Auth::user()->user_type == 'admin')
 
              
              <!-- Article -->
-             <li class="nav-item <?php if(Request::segment(2) == 'list' || Request::segment(2) == 'create') { echo 'active'; } ?>">
-              <a class="nav-link collapsed" data-bs-toggle="collapse" href="#forms" aria-expanded="<?php if(Request::segment(2) == 'list' || Request::segment(2) == 'create') { echo 'true'; } ?>" aria-controls="forms">
+             <li class="nav-item <?php if(Request::segment(2) == 'article') { echo 'active'; } ?>">
+              <a class="nav-link collapsed" data-bs-toggle="collapse" href="#forms" aria-expanded="<?php if(Request::segment(2) == 'article') { echo 'true'; } ?>" aria-controls="forms">
                 <span class="menu-title">Article</span>
                 <i class="mdi mdi-format-list-bulleted menu-icon"></i>
               </a>
-              <div class="collapse <?php if(Request::segment(2) == 'list' || Request::segment(2) == 'create') { echo 'show'; } ?>" id="forms" style="">
+              <div class="collapse <?php if(Request::segment(2) == 'article') { echo 'show'; } ?>" id="forms" style="">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item">
-                    <a class="nav-link <?php if(Request::segment(2) == 'list') { echo 'active'; } ?>" href="{{ route('admin.article.list') }}">Article List</a>
+                    <a class="nav-link <?php if(Request::segment(2) == 'article' && Request::segment(3) == 'list') { echo 'active'; } ?>" href="{{ route('admin.article.list') }}">Article List</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link <?php if(Request::segment(2) == 'create') { echo 'active'; } ?>" href="{{ route('admin.article.create') }}">Article Create</a>
+                    <a class="nav-link <?php if(Request::segment(2) == 'article' && Request::segment(3) == 'create') { echo 'active'; } ?>" href="{{ route('admin.article.create') }}">Article Create</a>
                   </li>
                 </ul>
               </div>
             </li>
 
+            <!-- Other -->
             
-
-            <!-- ##Queries Type -->
-              {{--
-            <li class="nav-item <?php if(Request::segment(2) == 'query') { echo 'active'; } ?>">
-              <a class="nav-link collapsed" data-bs-toggle="collapse" href="#query" aria-expanded="<?php if(Request::segment(2) == 'query') { echo 'true'; } ?>" aria-controls="forms">
-                <span class="menu-title">Query</span>
-                <i class="mdi mdi-table-large menu-icon"></i>
+             <li class="nav-item <?php if(Request::segment(2) == 'author') { echo 'active'; } ?>">
+              <a class="nav-link collapsed" data-bs-toggle="collapse" href="#author" aria-expanded="<?php if(Request::segment(2) == 'author') { echo 'true'; } ?>" aria-controls="author">
+                <span class="menu-title">Author</span>
+                <i class="mdi mdi-format-list-bulleted menu-icon"></i>
               </a>
-              <div class="collapse <?php if(Request::segment(3) == 'list' || Request::segment(3) == 'create') { echo 'show'; } ?>" id="query" style="">
+              <div class="collapse <?php if(Request::segment(2) == 'author') { echo 'show'; } ?>" id="author" style="">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item">
-                    <a class="nav-link <?php if(Request::segment(3) == 'list') { echo 'active'; } ?>" href="{{ route('hospital.query.list') }}">Query List</a>
+                    <a class="nav-link <?php if(Request::segment(2) == 'author' && Request::segment(3) == 'list') { echo 'active'; } ?>" href="{{ route('admin.author.list') }}">Author List</a>
                   </li>
-                 
-
-
+                  <li class="nav-item">
+                    <a class="nav-link <?php if(Request::segment(2) == 'author' && Request::segment(3) == 'create') { echo 'active'; } ?>" href="{{ route('admin.author.create') }}">Author Create</a>
+                  </li>
                 </ul>
               </div>
-            </li> --}}
-         
-            @endif
+            </li>
+
   
           </ul>
         </nav>
