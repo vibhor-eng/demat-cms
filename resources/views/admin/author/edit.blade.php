@@ -17,19 +17,19 @@
                   	@include('layouts.blocks.error')
                 	  @include('layouts.blocks.success')
                     <h4 class="card-title">Author Create</h4>
-                    <form class="forms-sample" id = "author-create-form" action = "{{route('admin.author.store')}}" method = "post" enctype="multipart/form-data">
+                    <form class="forms-sample" id = "author-create-form" action = "{{route('admin.author.edit')}}" method = "post" enctype="multipart/form-data">
                     	@csrf
 
                         <div class="form-group">
                             <div class = "row">
                               <div class = "col-md-6">
                                 <label for="exampleInputPassword4">Author Name <span class="text-danger">*</span></label>
-                                <input type="text" name = "author_name" class="form-control" id="author_name" placeholder="Author Name" value={{old('author_name')}}>
+                                <input type="text" name = "author_name" class="form-control" id="author_name" placeholder="Author Name" value="{{old('author_name', $existing_author->regional_name)}}">
                               </div>
 
                               <div class = "col-md-6">
                                 <label for="exampleInputPassword4">Author English Name <span class="text-danger">*</span></label>
-                                <input type="test" name = "author_eng_name" class="form-control" id="author_eng_name"  placeholder="Author English Name" value="{{old('author_eng_name')}}">
+                                <input type="test" name = "author_eng_name" class="form-control" id="author_eng_name"  placeholder="Author English Name" value="{{old('author_eng_name', $existing_author->english_name)}}">
                               </div>
                             </div>
                         </div>
@@ -38,16 +38,16 @@
                             <div class = "row">
                               <div class = "col-md-6">
                                 <label for="exampleInputPassword4">Author Designation</label>
-                                <input type="text" name = "author_designation" class="form-control" id="author_designation"  placeholder="Author Designation" value="{{old('author_designation')}}">
+                                <input type="text" name = "author_designation" class="form-control" id="author_designation"  placeholder="Author Designation" value="{{old('author_designation', $existing_author->designation)}}">
                               </div>
 
                               <div class = "col-md-6">
                                 <label for="exampleInputPassword4">Author Email Id <span class="text-danger">*</span></label>
-                                <input type="text" name = "author_email_id" class="form-control" id="author_email_id" placeholder="Author Email Id" value="{{old('author_email_id')}}">
+                                <input type="text" name = "author_email_id" class="form-control" id="author_email_id" placeholder="Author Email Id" value="{{old('author_email_id', $existing_author->email)}}">
                               </div>
                             </div>
                         </div>
-
+                        <input type="hidden" name="author_id" value="{{ $existing_author->id}}" />
                         <div class="form-group">
                             <div class = "row">
                               <div class = "col-md-6">
@@ -64,6 +64,11 @@
                                 <input type="file" name = "author_image" class="form-control">
                                 <label class="custom-file-label" for="authorImg">No file chosen</label>
                               </div>
+                              @if(isset($existing_author->image))
+                                <div class="col-4">
+                                    <img src="{{ $existing_author->image }}" alt="Author Image" width="140" height="100">
+                                </div>
+                             @endif
 
                             </div>
                         </div>
@@ -72,12 +77,18 @@
                             <div class = "row">
                               <div class = "col-md-12">
                                 <label for="editor">Author Description</label>
-                                <textarea name="authorDesc" id="editor">{{old('authorDesc')}}</textarea>
+                                <textarea name="authorDesc" id="editor">{{old('authorDesc', $existing_author->description)}}</textarea>
                               </div>
 
                               <div class = "col-md-6">
                                 <label for="exampleInputPassword4">Author Twitter Link</label>
-                                <input type="text" name = "author_twitter_link" value = "{{old('author_twitter_link')}}" class="form-control">
+                                <input type="text" name = "author_twitter_link" value = "{{old('author_twitter_link', $existing_author->twitter_link)}}" class="form-control">
+                              </div>
+
+                              <div class = "col-md-6">
+                                <label class="w-100" for="authordesignation">Author Slug
+                                  </label>
+                                <input type="text" class="form-control" name="author_slug" value="{{ $existing_author->slug }}" readonly>
                               </div>
 
                             </div>
@@ -88,8 +99,10 @@
                               <div class = "col-md-6">
                                 <label class="w-100" for="authordesignation">Author Enable/Disable
                                   </label>
-                                <input type="checkbox" class="form-check-input" id="author_status" name="author_status" checked="checked">
+                                <input type="checkbox" class="form-check-input" id="author_status" name="author_status" {{ isset($existing_author->status) && $existing_author->status  == 1 ? "checked" : "" }}>
                               </div>
+
+                              
 
                             </div>
                         </div>

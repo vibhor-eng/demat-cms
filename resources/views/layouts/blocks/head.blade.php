@@ -44,6 +44,7 @@
     <!-- End plugin js for this page -->
     <!-- inject:js -->
     <script type="text/javascript" src="{{asset ('assets/js/off-canvas.js') }}"></script>
+    <script type="text/javascript" src="{{asset ('assets/js/tinymce.js') }}"></script>
     <script type="text/javascript" src="{{asset ('assets/js/misc.js') }}"></script>
     <script type="text/javascript" src="{{asset ('assets/js/settings.js') }}"></script>
     <script type="text/javascript" src="{{asset ('assets/js/todolist.js') }}"></script>

@@ -43,6 +43,8 @@ Route::group(['prefix' => 'admin/article','middleware' => ['auth'],],function ()
 
     Route::get('/list', [App\Http\Controllers\ArticleController::class, 'list'])->name('admin.article.list');
     Route::get('/create', [App\Http\Controllers\ArticleController::class, 'create'])->name('admin.article.create');
+    Route::post('/store', [App\Http\Controllers\ArticleController::class, 'store'])->name('admin.article.store');
+    
 
 });
 
@@ -50,6 +52,9 @@ Route::group(['prefix' => 'admin/author','middleware' => ['auth'],],function () 
 
     Route::get('/list', [App\Http\Controllers\AuthorController::class, 'list'])->name('admin.author.list');
     Route::get('/create', [App\Http\Controllers\AuthorController::class, 'create'])->name('admin.author.create');
+    Route::post('/store', [App\Http\Controllers\AuthorController::class, 'store'])->name('admin.author.store');
+    Route::any('/edit/{id?}', [App\Http\Controllers\AuthorController::class, 'update'])->name('admin.author.edit');
+    Route::any('/delete', [App\Http\Controllers\AuthorController::class, 'delete'])->name('admin.author.delete');
 
 });
 

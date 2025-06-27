@@ -121,3 +121,19 @@ var ChartColor = ["#5D62B4", "#54C3BE", "#EF726F", "#F9C446", "rgb(93.0, 98.0, 1
   
   });
 })(jQuery);
+document.addEventListener("DOMContentLoaded", function () {
+        const editorElement = document.querySelector('#editor');
+        if (editorElement) {
+            ClassicEditor
+                .create(editorElement)
+                .then(editor => {
+                  editor.ui.view.editable.element.style.minHeight = '300px';
+                })
+                .catch(error => {
+                    console.error('CKEditor initialization error:', error);
+                });
+        } else {
+            console.warn('Editor element not found.');
+        }
+    });
+
