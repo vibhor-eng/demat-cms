@@ -51,7 +51,7 @@ class Author extends Model
 
 			// \Storage::disk('s3')->putFileAs(env('S3_IMAGE_UPLOAD_PATH').'/author/', $request->file('author_image'), $filename);
 
-			$author->image = public_path('uploads').'/'.$filename;
+			$author->image = '/uploads/'.$filename;
         }
         $author->status = ($request->get('author_status') == 'on') ? 1 : 0;
         if($author->save())

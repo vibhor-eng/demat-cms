@@ -50,7 +50,7 @@
                         <input type="hidden" name="author_id" value="{{ $existing_author->id}}" />
                         <div class="form-group">
                             <div class = "row">
-                              <div class = "col-md-6">
+                              <div class = "col-md-12">
                                 <label for="exampleInputPassword4">Channel</label>
                                 <select class="form-select" name = "channel_id" id="exampleFormControlSelect2">
                                   @foreach ($channels_list as $channel_id=>$channel_name)
@@ -58,7 +58,11 @@
                                   @endforeach
                                 </select>
                               </div>
+                            </div>
+                        </div>
 
+                        <div class="form-group">
+                            <div class = "row">
                               <div class = "col-md-6">
                                 <label for="exampleInputPassword4">Author Image <span class="text-danger">*</span></label>
                                 <input type="file" name = "author_image" class="form-control">
@@ -66,7 +70,7 @@
                               </div>
                               @if(isset($existing_author->image))
                                 <div class="col-4">
-                                    <img src="{{ $existing_author->image }}" alt="Author Image" width="140" height="100">
+                                    <img src="{{ asset($existing_author->image) }}" alt="Author Image" width="140" height="100">
                                 </div>
                              @endif
 
@@ -75,10 +79,16 @@
 
                         <div class="form-group">
                             <div class = "row">
+
                               <div class = "col-md-12">
                                 <label for="editor">Author Description</label>
                                 <textarea name="authorDesc" id="editor">{{old('authorDesc', $existing_author->description)}}</textarea>
                               </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class = "row">
 
                               <div class = "col-md-6">
                                 <label for="exampleInputPassword4">Author Twitter Link</label>
