@@ -16,34 +16,20 @@
                   <div class="card-body">
                   	@include('layouts.blocks.error')
                 	  @include('layouts.blocks.success')
-                    <h4 class="card-title">Author Create</h4>
-                    <form class="forms-sample" id = "author-create-form" action = "{{route('admin.author.store')}}" method = "post" enctype="multipart/form-data">
+                    <h4 class="card-title">Add New Tag</h4>
+                    <form class="forms-sample" id = "topic-create-form" action = "{{route('admin.tag.store')}}" method = "post" enctype="multipart/form-data">
                     	@csrf
 
                         <div class="form-group">
                             <div class = "row">
                               <div class = "col-md-6">
-                                <label for="exampleInputPassword4">Author Name <span class="text-danger">*</span></label>
-                                <input type="text" name = "author_name" class="form-control" id="author_name" placeholder="Author Name" value={{old('author_name')}}>
+                                <label for="exampleInputPassword4">Name <span class="text-danger">*</span></label>
+                                <input type="text" name = "topic_name" class="form-control" id="topic_name" placeholder="Topic Name" value={{old('topic_name')}}>
                               </div>
 
                               <div class = "col-md-6">
-                                <label for="exampleInputPassword4">Author English Name <span class="text-danger">*</span></label>
-                                <input type="test" name = "author_eng_name" class="form-control" id="author_eng_name"  placeholder="Author English Name" value="{{old('author_eng_name')}}">
-                              </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class = "row">
-                              <div class = "col-md-6">
-                                <label for="exampleInputPassword4">Author Designation</label>
-                                <input type="text" name = "author_designation" class="form-control" id="author_designation"  placeholder="Author Designation" value="{{old('author_designation')}}">
-                              </div>
-
-                              <div class = "col-md-6">
-                                <label for="exampleInputPassword4">Author Email Id <span class="text-danger">*</span></label>
-                                <input type="text" name = "author_email_id" class="form-control" id="author_email_id" placeholder="Author Email Id" value="{{old('author_email_id')}}">
+                                <label for="exampleInputPassword4">English Name <span class="text-danger">*</span></label>
+                                <input type="test" name = "topic_eng_name" class="form-control" id="topic_eng_name"  placeholder="Topic English Name" value="{{old('topic_eng_name')}}">
                               </div>
                             </div>
                         </div>
@@ -60,9 +46,8 @@
                               </div>
 
                               <div class = "col-md-6">
-                                <label for="exampleInputPassword4">Author Image <span class="text-danger">*</span></label>
-                                <input type="file" name = "author_image" class="form-control">
-                                <label class="custom-file-label" for="authorImg">No file chosen</label>
+                                <label for="exampleInputPassword4">Heading</label>
+                                <input type="text" name = "topic_heading" class="form-control" id="topic_heading"  placeholder="Topic Heading" value="{{old('topic_heading')}}">
                               </div>
 
                             </div>
@@ -71,8 +56,8 @@
                         <div class="form-group">
                             <div class = "row">
                               <div class = "col-md-12">
-                                <label for="editor">Author Description</label>
-                                <textarea name="authorDesc" id="editor">{{old('authorDesc')}}</textarea>
+                                <label for="editor">Description</label>
+                                <textarea name="topicDesc" id="editor">{{old('topicDesc')}}</textarea>
                               </div>
                             </div>
                         </div>
@@ -80,8 +65,13 @@
                         <div class="form-group">
                             <div class = "row">
                               <div class = "col-md-6">
-                                <label for="exampleInputPassword4">Author Twitter Link</label>
-                                <input type="text" name = "author_twitter_link" value = "{{old('author_twitter_link')}}" class="form-control">
+                                <label for="exampleInputPassword4">SEO Title</label>
+                                <input type="text" name = "topic_seo_title" class="form-control" id="topic_seo_title"  placeholder="SEO Title" value="{{old('topic_seo_title')}}">
+                              </div>
+
+                              <div class = "col-md-6">
+                                <label for="exampleInputPassword4">SEO Description</label>
+                                <input type="text" name = "topic_seo_description" class="form-control" id="topic_seo_description" placeholder="SEO Description" value="{{old('topic_seo_description')}}">
                               </div>
                             </div>
                         </div>
@@ -89,13 +79,18 @@
                         <div class="form-group">
                             <div class = "row">
                               <div class = "col-md-6">
-                                <label class="w-100" for="authordesignation">Author Enable/Disable
-                                  </label>
-                                <input type="checkbox" class="form-check-input" id="author_status" name="author_status" checked="checked">
+                                <label for="exampleInputPassword4">SEO English Keyword</label>
+                                <input type="text" name = "topic_seo_eng_title" class="form-control" id="topic_seo_eng_title"  placeholder="SEO Eng Title" value="{{old('topic_seo_eng_title')}}">
                               </div>
 
+                              <div class = "col-md-6">
+                                <label for="exampleInputPassword4">SEO Regional Keywords</label>
+                                <input type="text" name = "topic_seo_reg_title" class="form-control" id="topic_seo_reg_title" placeholder="SEO Description" value="{{old('topic_seo_reg_title')}}">
+                              </div>
                             </div>
                         </div>
+
+                        
 
                       
                       <button type="submit" id = "createBtn" class="btn btn-gradient-primary me-2">Submit</button>
@@ -119,18 +114,14 @@
   $(document).ready(function () {
 
 
-       $('#author-create-form').validate({ // initialize the plugin
+      $('#topic-create-form').validate({ // initialize the plugin
            rules: {
-               author_name: {
+               topic_name: {
                    required: true,
                },
-               author_eng_name:{
+               topic_eng_name:{
                  required:true,
-               },
-               author_email_id:{
-                 required:true,
-                 email:true
-               },
+               }
            },
            submitHandler: function(form) {
              form.submit(); // Submit the form if valid
@@ -139,20 +130,17 @@
 
   });
 
-  $('#authorImg').on('change',function(){
-    var fileName = $(this).val();
-    $(this).next('.custom-file-label').html(fileName);
-  })
+
 
   $("#createBtn").click(function() { 
 	
-    var engnameauthor = $("#author_eng_name").val();
+    var engnameauthor = $("#topic_eng_name").val();
     //alert(engnameauthor);
     var ss= hasHindiCharacters(engnameauthor);
     if(ss)
     {
       alert('Please enter Author Name in English only');
-      $("#author_eng_name").focus();
+      $("#topic_eng_name").focus();
       return false;
       
     }

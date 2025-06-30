@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\TagsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +56,16 @@ Route::group(['prefix' => 'admin/author','middleware' => ['auth'],],function () 
     Route::post('/store', [App\Http\Controllers\AuthorController::class, 'store'])->name('admin.author.store');
     Route::any('/edit/{id?}', [App\Http\Controllers\AuthorController::class, 'update'])->name('admin.author.edit');
     Route::any('/delete', [App\Http\Controllers\AuthorController::class, 'delete'])->name('admin.author.delete');
+
+});
+
+Route::group(['prefix' => 'admin/tag','middleware' => ['auth'],],function () {
+
+    Route::get('/list', [App\Http\Controllers\TagsController::class, 'list'])->name('admin.tag.list');
+    Route::get('/create', [App\Http\Controllers\TagsController::class, 'create'])->name('admin.tag.create');
+    Route::post('/store', [App\Http\Controllers\TagsController::class, 'store'])->name('admin.tag.store');
+    Route::any('/edit/{id?}', [App\Http\Controllers\TagsController::class, 'update'])->name('admin.tag.edit');
+    Route::any('/delete', [App\Http\Controllers\TagsController::class, 'delete'])->name('admin.tag.delete');
 
 });
 
