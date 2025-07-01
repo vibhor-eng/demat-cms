@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\File;
 
 class TagsController extends Controller
 {
@@ -58,47 +59,52 @@ class TagsController extends Controller
 
     public function store(Request $request){
 
-        //validation
-        $validatedData = $request->validate([
-            'topic_name' => 'required|max:255',
-            'topic_eng_name' => 'required'
-        ]);
+        try{
 
-        $slug = convert_to_slug($request->get('topic_eng_name'));
-        $userDetails = \Auth::user();
-        // dd($request->get('channel'));
-        $tagObj = Tag::where(['slug' => $slug, 'channel_id' => $request->get('channel')])->first();
-        if($tagObj){
-            return redirect()->back()->with('errors', "Slug can not be duplicate.");
+            //validation
+            $validatedData = $request->validate([
+                'topic_name' => 'required|max:255',
+                'topic_eng_name' => 'required'
+            ]);
+
+            $slug = convert_to_slug($request->get('topic_eng_name'));
+            $userDetails = \Auth::user();
+            // dd($request->get('channel'));
+            $tagObj = Tag::where(['slug' => $slug, 'channel_id' => $request->get('channel')])->first();
+            if($tagObj){
+                return redirect()->back()->with('errors', "Slug can not be duplicate.");
+            }
+
+
+            $tags = new Tag();
+            $channelName = strtolower(getChannelLabelName($request->get('channel_id')));
+            $tags->regional_name = $request->get('topic_name');
+            $tags->english_name = $request->get('topic_eng_name');   
+            $tags->headline = $request->get('topic_heading');
+            $tags->description = $request->get('topicDesc');
+            $tags->channel_id = $request->get('channel_id');
+            $tags->seo_title = $request->get('topic_seo_title');
+            $tags->seo_description = $request->get('topic_seo_description');
+            $tags->seo_keyword = $request->get('topic_seo_eng_title');
+            $tags->seo_reg_keywords = $request->get('topic_seo_reg_title');
+            $tags->created_by = \Auth::user()->id;
+            $tags->slug = $slug;
+            $tags->created_by = $userDetails->id;
+            
+            $tags->save();
+
+            $saveJson = $this->saveJsonToLocal($request,'create');
+            if($saveJson){
+                $successMsg = 'tags has been added successfully';
+                return redirect()->back()->with('success', $successMsg);
+            }else{
+                $successMsg = 'tags has been added successfully.Json could not save.';
+                return redirect()->back()->with('success', $successMsg);
+            }
+        }catch(\Exception $e){
+            return redirect()->back()->with('errors', "Something went wrong.");
         }
-
-
-        $tags = new Tag();
-        $channelName = strtolower(getChannelLabelName($request->get('channel_id')));
-        $tags->regional_name = $request->get('topic_name');
-        $tags->english_name = $request->get('topic_eng_name');   
-        $tags->headline = $request->get('topic_heading');
-        $tags->description = $request->get('topicDesc');
-        $tags->channel_id = $request->get('channel_id');
-        $tags->seo_title = $request->get('topic_seo_title');
-        $tags->seo_description = $request->get('topic_seo_description');
-        $tags->seo_keyword = $request->get('topic_seo_eng_title');
-        $tags->seo_reg_keywords = $request->get('topic_seo_reg_title');
-        $tags->created_by = \Auth::user()->id;
-        $tags->slug = $slug;
-        $tags->created_by = $userDetails->id;
-
         
-        
-        $tags->save();
-
-
-       
-
-
-        // $this->makeJsonforTags($tags);
-        $successMsg = 'tags has been added successfully';
-        return redirect()->back()->with('success', $successMsg);
 
     }
 
@@ -146,16 +152,79 @@ class TagsController extends Controller
 
             
 
-            // $this->makeJsonforTags($tag);
+            $saveJson = $this->saveJsonToLocal($request,'create');
 
-            $successMsg = 'tags has been edited successfully';
-            return redirect()->back()->with('success', $successMsg);
+            if($saveJson){
+                $successMsg = 'tags has been edited successfully';
+                return redirect()->back()->with('success', $successMsg);
+            }else{
+                $successMsg = 'tags has been edited successfully. Json could not save.';
+                return redirect()->back()->with('success', $successMsg);
+            }
 
         }
 
         $channels_list = get_channels_list();
         $existing_tag = Tag::where('id', $request->id)->first();
         return view('admin.topic.edit', compact('existing_tag', 'channels_list'));
+
+    }
+
+    protected function saveJsonToLocal($request,$type){
+
+        try{
+
+                $InsertedData = Tag::where(['is_deleted' => 0])->orderBy('id','desc')->first();
+            if($type == 'update'){
+                $InsertedData = Tag::where(['id' => $request->tag_id])->first();
+            }
+
+            $data = [
+                'channel_id' => $InsertedData->channel_id,
+                'channel_name' => getChannelLabelName($InsertedData->channel_id) ?? 'N/A',
+                'tag_name' => $InsertedData->regional_name,
+                'tag_eng_name' => $InsertedData->english_name,
+                'slug' => $InsertedData->slug,
+                'headline' => $InsertedData->headline,
+                'description' => $InsertedData->description,
+                'seo_title' => $InsertedData->seo_title,
+                'seo_description' => $InsertedData->seo_description,
+                'seo_keywords' => $InsertedData->seo_keywords,
+                'seo_reg_keywords' => $InsertedData->seo_reg_keywords,
+                'status' => $InsertedData->status,
+                'created_by' => $InsertedData->created_by,
+            ];
+
+            $jsonData = json_encode($data, JSON_PRETTY_PRINT);
+
+            $fileName = 'tag_' .strtolower($data['channel_name']). '_'. $InsertedData->id. '.json';
+
+            //delete file in case of update
+            if($type == 'update'){
+                $filePath = public_path('json/tag/'.$fileName);
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
+
+            }
+            
+
+            // Define file path inside /public/json/
+            $path = public_path('json/tag');
+
+            // Create directory if it doesn't exist
+            if (!File::exists($path)) {
+                File::makeDirectory($path, 0755, true);
+            }
+
+            // Save JSON file
+            File::put($path . '/' . $fileName, $jsonData);
+
+            return true;
+
+        }catch(\Exception $e){
+            return false;
+        }
 
     }
 }

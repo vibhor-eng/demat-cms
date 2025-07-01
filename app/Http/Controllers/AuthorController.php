@@ -82,7 +82,7 @@ class AuthorController extends Controller
                 $successMsg = 'Author has been successfully added.';
                 return redirect()->back()->with('success', $successMsg);
             }else{
-                $successMsg = 'Author has been successfully updated. Json could not save.';
+                $successMsg = 'Author has been successfully added. Json could not save.';
                 return redirect()->back()->with('success', $successMsg);
             }
             
@@ -169,11 +169,11 @@ class AuthorController extends Controller
 
             $jsonData = json_encode($data, JSON_PRETTY_PRINT);
 
-            $fileName = 'author_' .$data['channel_name']. '_'. $InsertedData->id. '.json';
+            $fileName = 'author_' .strtolower($data['channel_name']). '_'. $InsertedData->id. '.json';
 
             //delete file in case of update
             if($type == 'update'){
-                $filePath = public_path('json/'.$fileName);
+                $filePath = public_path('json/author/'.$fileName);
                 if (file_exists($filePath)) {
                     unlink($filePath);
                 }
@@ -182,7 +182,7 @@ class AuthorController extends Controller
             
 
             // Define file path inside /public/json/
-            $path = public_path('json');
+            $path = public_path('json/author');
 
             // Create directory if it doesn't exist
             if (!File::exists($path)) {
