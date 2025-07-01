@@ -29,8 +29,42 @@ table, th, td {
                 <div class="card" style = "overflow-x:auto;">
                   <div class="card-body">
                     <h4 class="card-title">Tag List</h4>
-                    <!-- <p class="card-description"> Add class <code>.table-hover</code> -->
-                    </p>
+
+                    <!-- Search Form -->
+                     
+                    <form action="{{route('admin.tag.list')}}" method="get">
+                      <div class="form-group">
+                            <div class = "row">
+                              <div class = "col-md-6">
+                                <select class="form-select" name = "channel" id="exampleFormControlSelect2">
+                                  @foreach ($channels_list as $channel_id=>$channel_name)
+                                    @if ($channel == $channel_id)
+                                        <option value="{{ $channel_id }}" selected>{{ $channel_name }}</option>
+                                    @else
+                                        <option value="{{ $channel_id }}">{{ $channel_name }}</option>
+                                    @endif
+                                  @endforeach
+                                </select>
+                              </div>
+
+                              <div class = "col-md-6">
+                                <input type="text" name = "tagSearchTerm" class="form-control" id="search"  placeholder="Search" value="{{ $tagSearchTerm ?? '' }}">
+                              </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class = "row">
+                              <label for="exact match">Exact Match<input type="checkbox"  value="1" name="exact_match" {{ !empty($exact_match) ? "checked" : '' }}></label>
+                            </div>
+                        </div>
+                        <button type="submit" id = "createBtn" class="btn btn-gradient-primary me-2">Search Tags</button>
+                    </form>
+
+                    <br><br>
+
+                    <!-- End Search Form -->
+
                     <table class="table table-hover" id = "tag_table">
                       <thead>
                         <tr>
