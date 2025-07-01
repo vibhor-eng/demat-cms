@@ -32,13 +32,13 @@ table, th, td {
                     
                     <!-- Search Form -->
                      
-                    <form action="{{route('admin.tag.list')}}" method="get">
+                    <form action="{{route('admin.author.list')}}" method="get">
                       <div class="form-group">
                             <div class = "row">
-                              <div class = "col-md-6">
+                              <div class = "col-md-4">
                                 <select class="form-select" name = "channel" id="exampleFormControlSelect2">
                                   @foreach ($channels_list as $channel_id=>$channel_name)
-                                    @if ($channel == $channel_id)
+                                    @if ($default_channel_id == $channel_id)
                                         <option value="{{ $channel_id }}" selected>{{ $channel_name }}</option>
                                     @else
                                         <option value="{{ $channel_id }}">{{ $channel_name }}</option>
@@ -47,18 +47,26 @@ table, th, td {
                                 </select>
                               </div>
 
-                              <div class = "col-md-6">
-                                <input type="text" name = "tagSearchTerm" class="form-control" id="search"  placeholder="Search" value="{{ $tagSearchTerm ?? '' }}">
+                              <div class = "col-md-4">
+                                <select class="form-select" id="author_status" name="author_status">
+                                  <option value="1" @if(request()->author_status == '1') selected @endif>Active</option>
+                                  <option value="0" @if(request()->author_status == '0') selected @endif>Inactive</option>
+                                </select>
                               </div>
+
+                              <div class = "col-md-4">
+                                <input type="search" class="form-control" id="authorSearchTerm" name="keyword"  value="{{app('request')->input('keyword')}}" placeholder="Search">
+                              </div>
+
+
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <div class = "row">
-                              <label for="exact match">Exact Match<input type="checkbox"  value="1" name="exact_match" {{ !empty($exact_match) ? "checked" : '' }}></label>
-                            </div>
-                        </div>
-                        <button type="submit" id = "createBtn" class="btn btn-gradient-primary me-2">Search Tags</button>
+                        
+                        <button type="submit" class="btn btn-gradient-primary me-2">Search Authors</button>
+
+                        <a href = "{{route('admin.author.list')}}"><button type="button" class="btn btn-gradient-danger me-2">Reset</button></a>
+
                     </form>
 
                     <br><br>
