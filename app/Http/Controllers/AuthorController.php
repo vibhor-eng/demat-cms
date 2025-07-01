@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Author;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\File;
 
 class AuthorController extends Controller
 {
@@ -29,7 +30,7 @@ class AuthorController extends Controller
     {
         $channels_list = get_channels_list();
         $default_channel_id = $request->channel ? (int)$request->channel : (int)\Auth::user()->channel_id;
-        $author = Author::where(['channel_id' => $default_channel_id ,'is_deleted' => 0])->orderBy('created_date', 'desc');
+        $author = Author::where(['channel_id' => $default_channel_id ,'is_deleted' => 0])->orderBy('id', 'desc');
         if(isset($request->author_status)){
             $author->where('status', (int)$request->author_status);
         }
@@ -73,9 +74,21 @@ class AuthorController extends Controller
                 ->withInput($request->input())
                 ->withErrors('Author already exists');
         }
-        Author::createOrUpdate($request, 'create');
-        $successMsg = 'Author has been successfully added';
-        return redirect()->back()->with('success', $successMsg);
+        $AuthorCreate = Author::createOrUpdate($request, 'create');
+        if($AuthorCreate){
+            
+            $saveJson = $this->saveJsonToLocal($request,'create');
+            if($saveJson){
+                $successMsg = 'Author has been successfully added.';
+                return redirect()->back()->with('success', $successMsg);
+            }else{
+                $successMsg = 'Author has been successfully updated. Json could not save.';
+                return redirect()->back()->with('success', $successMsg);
+            }
+            
+        }else{
+            return redirect()->back()->with('errors', "Something went wrong.");
+        }
 
     }
 
@@ -103,14 +116,87 @@ class AuthorController extends Controller
         if ($request->isMethod('post')) {
 
             Author::validateRequest($request, 'edit');
-            Author::createOrUpdate($request, 'edit');
-            $successMsg = 'Author has been successfully updated';
-             return redirect()->back()->with('success', $successMsg);
+            $AuthorUpdate = Author::createOrUpdate($request, 'edit');
+            if($AuthorUpdate){
+
+                $saveJson = $this->saveJsonToLocal($request,'update');
+                if($saveJson){
+                    $successMsg = 'Author has been successfully updated';
+                    return redirect()->back()->with('success', $successMsg);
+                }else{
+                    $successMsg = 'Author has been successfully updated. Json could not save.';
+                    return redirect()->back()->with('success', $successMsg);
+                }
+                
+            }else{
+                return redirect()->back()->with('errors', "Something went wrong.");
+            }
+            
         }
 
         $channels_list = get_channels_list();
         $existing_author = Author::where('id', $request->id)->first();
         return view('admin.author.edit', compact('existing_author', 'channels_list'));
+
+    }
+
+    protected function saveJsonToLocal($request,$type){
+
+        try{
+
+                $InsertedData = Author::where(['is_deleted' => 0])->orderBy('id','desc')->first();
+            if($type == 'update'){
+                $InsertedData = Author::where(['id' => $request->author_id])->first();
+            }
+
+            $data = [
+                'channel_id' => $InsertedData->channel_id,
+                'channel_name' => getChannelLabelName($InsertedData->channel_id) ?? 'N/A',
+                'author_name' => $InsertedData->regional_name,
+                'author_eng_name' => $InsertedData->english_name,
+                'slug' => $InsertedData->slug,
+                'designation' => $InsertedData->designation,
+                'email' => $InsertedData->email,
+                'image' => $InsertedData->image,
+                'description' => $InsertedData->description,
+                'twitter_link' => $InsertedData->twitter_link,
+                'seo_title' => $InsertedData->seo_title,
+                'seo_description' => $InsertedData->seo_description,
+                'seo_keywords' => $InsertedData->seo_keywords,
+                'status' => $InsertedData->status,
+                'created_by' => $InsertedData->created_by,
+            ];
+
+            $jsonData = json_encode($data, JSON_PRETTY_PRINT);
+
+            $fileName = 'author_' .$data['channel_name']. '_'. $InsertedData->id. '.json';
+
+            //delete file in case of update
+            if($type == 'update'){
+                $filePath = public_path('json/'.$fileName);
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
+
+            }
+            
+
+            // Define file path inside /public/json/
+            $path = public_path('json');
+
+            // Create directory if it doesn't exist
+            if (!File::exists($path)) {
+                File::makeDirectory($path, 0755, true);
+            }
+
+            // Save JSON file
+            File::put($path . '/' . $fileName, $jsonData);
+
+            return true;
+
+        }catch(\Exception $e){
+            return false;
+        }
 
     }
 }

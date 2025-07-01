@@ -61,10 +61,10 @@ class Author extends Model
             // \App\Jobs\CallRouteJob::dispatch($jobDataS3)->delay(Carbon::now()->addseconds((int)env('QUEUE_DELAY')))->onQueue('queue1');
             // self::authorJsonOnS3($author->channel_id);
             // self::insertDataIntoElasticSearch($author, $type);
-			return '1';
+			return true;
         }
 		else{
-			return '0';
+			return false;
         }
     }
 }   
